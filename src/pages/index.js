@@ -17,7 +17,22 @@ export default function Home() {
     "https://firebasestorage.googleapis.com/v0/b/santa-tracker-firebase.appspot.com/o/route%2Fsanta_en.json?alt=media&2018b",
     fetcher
   );
-  console.log(data);
+  const currentDate = new Date(Date.now());
+  const currentYear = currentDate.getFullYear();
+  const destinations = data?.destinations.map((destination) => {
+    const { arrival, departure } = destination;
+    const arrivalDate = new Date(arrival);
+    const departureDate = new Date(departure);
+
+    arrivalDate.setFullYear(currentYear);
+    departureDate.setFullYear(currentYear);
+    return {
+      ...destination,
+      arrival: arrivalDate.getTime(),
+      departure: departureDate.getTime(),
+    };
+  });
+
   return (
     <Layout>
       <Head>
@@ -37,24 +52,48 @@ export default function Home() {
             className={styles.homeMap}
             width="800"
             height="400"
-            center={DEFAULT_CENTER}
-            zoom={12}
+            center={[0, 0]}
+            zoom={1}
           >
-            {({ TileLayer, Marker, Popup }) => (
+            {({ TileLayer, Marker, Popup }, Leaflet) => (
               <>
                 <TileLayer
                   url="https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png"
                   attribution='&copy; <a href="http://osm.org/copyright">OpenStreetMap</a> contributors'
                 />
-                {data?.destinations.map((destination) => {
-                  return (
-                    <Marker position={DEFAULT_CENTER}>
-                      <Popup>
-                        A pretty CSS3 popup. <br /> Easily customizable.
-                      </Popup>
-                    </Marker>
-                  );
-                })}
+                {destinations?.map(
+                  ({ id, arrival, departure, location, city, region }) => {
+                    const arrivalDate = new Date(arrival);
+                    const arrivalHours = arrivalDate.getHours();
+                    const arrivalMinutes = arrivalDate.getMinutes();
+                    const arrivalTime = `${arrivalHours}:${arrivalMinutes}`;
+
+                    const departureDate = new Date(departure);
+                    const departureHours = departureDate.getHours();
+                    const departureMinutes = departureDate.getMinutes();
+                    const departureTime = `${departureHours}:${departureMinutes}`;
+                    return (
+                      <Marker
+                        key={id}
+                        position={[location.lat, location.lng]}
+                        icon={Leaflet.icon({
+                          iconUrl: "/images/tree-marker-icon.png",
+                          iconRetinaUrl: "/images/tree-marker-icon-2x.png",
+                          iconSize: [41, 41],
+                        })}
+                      >
+                        <Popup>
+                          {city}, {region}
+                          <br />
+                          Arrival: {arrivalDate.toDateString()} @ {arrivalTime}
+                          <br />
+                          departure: {departureDate.toDateString()} @{" "}
+                          {departureTime}
+                        </Popup>
+                      </Marker>
+                    );
+                  }
+                )}
               </>
             )}
           </Map>

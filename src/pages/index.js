@@ -72,14 +72,40 @@ export default function Home() {
                     const departureHours = departureDate.getHours();
                     const departureMinutes = departureDate.getMinutes();
                     const departureTime = `${departureHours}:${departureMinutes}`;
+
+                    const santaWasHere =
+                      currentDate.getTime() - departureDate.getTime() > 0;
+                    const santaIsHere =
+                      currentDate.getTime() - arrivalDate.getTime() > 0 &&
+                      !santaWasHere;
+
+                    let iconUrl = "/images/tree-marker-icon.png";
+                    let iconRetinaUrl = "/images/tree-marker-icon-2x.png";
+
+                    if (santaWasHere) {
+                      iconUrl = "/images/gift-marker-icon.png";
+                      iconRetinaUrl = "/images/gift-marker-icon-2x.png";
+                    }
+                    if (santaIsHere) {
+                      iconUrl = "/images/santa-marker-icon.png";
+                      iconRetinaUrl = "/images/santa-marker-icon-2x.png";
+                    }
+
+                    let className = "";
+
+                    if (santaIsHere) {
+                      className = `${className} ${styles.iconSantaIsHere}`;
+                    }
+
                     return (
                       <Marker
                         key={id}
                         position={[location.lat, location.lng]}
                         icon={Leaflet.icon({
-                          iconUrl: "/images/tree-marker-icon.png",
-                          iconRetinaUrl: "/images/tree-marker-icon-2x.png",
+                          iconUrl,
+                          iconRetinaUrl,
                           iconSize: [41, 41],
+                          className,
                         })}
                       >
                         <Popup>

@@ -36,7 +36,7 @@ export default function Home() {
   return (
     <Layout>
       <Head>
-        <title>Next.js Leaflet Starter</title>
+        <title>Santa Tracker</title>
         <meta
           name="description"
           content="Create mapping apps with Next.js Leaflet Starter"
@@ -46,7 +46,7 @@ export default function Home() {
 
       <Section>
         <Container>
-          <h1 className={styles.title}>Next.js Leaflet Starter</h1>
+          <h1 className={styles.title}>Can you find Santa?</h1>
 
           <Map
             className={styles.homeMap}

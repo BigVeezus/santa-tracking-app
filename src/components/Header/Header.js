@@ -1,22 +1,23 @@
-import Link from 'next/link';
-import { FaGithub } from 'react-icons/fa';
+import Link from "next/link";
+import { FaGithub } from "react-icons/fa";
 
-import Container from '@components/Container';
+import Container from "@components/Container";
 
-import styles from './Header.module.scss';
+import styles from "./Header.module.scss";
 
 const Header = () => {
   return (
     <header className={styles.header}>
       <Container className={styles.headerContainer}>
         <p className={styles.headerTitle}>
-          <Link href="/">
-            Next.js Leaflet Starter
-          </Link>
+          <Link href="/">Santa Tracker App</Link>
         </p>
         <ul className={styles.headerLinks}>
           <li>
-            <a href="https://github.com/colbyfayock/next-leaflet-starter" rel="noreferrer">
+            <a
+              href="https://github.com/colbyfayock/next-leaflet-starter"
+              rel="noreferrer"
+            >
               <FaGithub />
             </a>
           </li>
